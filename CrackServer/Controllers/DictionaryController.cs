@@ -37,7 +37,7 @@ namespace WebApplication3.Controllers
             string password;
             byte[] tmpSource;
             byte[] tmpHash;
-            password = "paperino";
+            password = "12345678";
 
             //Create a byte array from source data.
             tmpSource = ASCIIEncoding.ASCII.GetBytes(password);

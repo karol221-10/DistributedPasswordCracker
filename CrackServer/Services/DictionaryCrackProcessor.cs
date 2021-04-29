@@ -35,7 +35,21 @@ namespace CrackServer.Services
             foreach (string word in words)
             {
                 List<string> permutedWords = Permute(word);
-
+                if (word.All(char.IsDigit))
+                {
+                    Console.WriteLine(word);
+                    //todo: wydzielic sprytnie te dwa ify
+                    bool result = crackerPort.tryCrack(word, hashToCrack);
+                    if (result)
+                    {
+                        stopWatch.Stop();
+                        TimeSpan ts = stopWatch.Elapsed;
+                        string elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                        return new CrackResult(word, elapsedTime, counter);
+                    }
+                    counter++;
+                    continue;
+                }
                 foreach (string permutedWord in permutedWords)
                 {
                     Console.WriteLine(permutedWord);
@@ -45,7 +59,7 @@ namespace CrackServer.Services
                         stopWatch.Stop();
                         TimeSpan ts = stopWatch.Elapsed;
                         string elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                        return new CrackResult(word, elapsedTime, counter);
+                        return new CrackResult(permutedWord, elapsedTime, counter);
                     }
                     counter++;
                 }
