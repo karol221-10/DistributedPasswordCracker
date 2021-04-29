@@ -8,6 +8,7 @@ namespace CrackServer.Services
     public interface IDictionaryTestProvider
     {
 
-        string[] fetchDictionary();
+        string[] fetchDictionaryWords(string dictionaryName, int startPointer, int endPointer);
+        void addDictionary(string dictionaryName, string[] dictionaryContent);
     }
 }

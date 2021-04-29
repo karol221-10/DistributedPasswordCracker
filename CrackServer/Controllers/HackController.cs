@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CrackServer.models;
+using CrackServer.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,11 +14,17 @@ namespace WebApplication3.Controllers
     [ApiController]
     public class HackController : ControllerBase
     {
-        [HttpPut]
-        public HackResponse hackPassword(HackRequest hackRequest)
+        private DictionaryCrackProcessor dictionaryCrackProcessor;
+
+        public HackController(DictionaryCrackProcessor dictionaryCrackProcessor)
         {
-            //TODO: hack password logic 
-            return new HackResponse();
+            this.dictionaryCrackProcessor = dictionaryCrackProcessor;
+        }
+
+        [HttpPut]
+        public CrackResult hackPassword(HackRequest hackRequest)
+        {
+            return dictionaryCrackProcessor.crackPassword(hackRequest.objectName, hackRequest.dictionaryName, hackRequest.startPointer, hackRequest.endPointer);
         }
 
     }

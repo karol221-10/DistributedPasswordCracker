@@ -10,8 +10,9 @@ namespace WebApplication3.ObjectApis
     public class HackRequest 
     {
         public String objectName { get; set; }
-        public String startPointer { get; set; }
-        public String endPointer { get; set; }
-        public String method { get; set; }
+
+        public String dictionaryName { get; set; }
+        public int startPointer { get; set; }
+        public int endPointer { get; set; }
     }
 }

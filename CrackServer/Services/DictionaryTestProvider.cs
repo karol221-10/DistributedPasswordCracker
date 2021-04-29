@@ -8,9 +8,18 @@ namespace CrackServer.Services
 {
     public class DictionaryTestProvider : IDictionaryTestProvider
     {
-        public string[] fetchDictionary()
+        private Dictionary<string, List<string>> dictionaryMap = new Dictionary<string, List<string>>();
+
+        public void addDictionary(string dictionaryName, string[] dictionaryContent)
         {
-            return File.ReadLines("C:\\Users\\Kamil\\Desktop\\lamacz\\DistributedPasswordCracker\\test_dict.txt").ToArray();  
+            dictionaryMap.Add(dictionaryName, dictionaryContent.OfType<string>().ToList());
+        }
+
+        public string[] fetchDictionaryWords(string dictionaryName, int startPointer, int endPointer)
+        {
+            List<string> result;
+            dictionaryMap.TryGetValue(dictionaryName,out result);
+            return new ArraySegment<string>(result.ToArray(), startPointer, endPointer).ToArray();
         }
     }
 }

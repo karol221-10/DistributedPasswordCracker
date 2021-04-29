@@ -1,3 +1,4 @@
+using CrackServer.IServices;
 using CrackServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +29,9 @@ namespace CrackServer
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApplication3", Version = "v1" });
             });
+            services.AddSingleton<ObjectToCrackProvider>();
             services.AddSingleton<IDictionaryTestProvider,DictionaryTestProvider>();
+            services.AddSingleton<DictionaryCrackProcessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

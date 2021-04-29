@@ -11,27 +11,27 @@ namespace CrackServer.Services
     public class DictionaryCrackProcessor
     {
         private const string TIME_FORMATTER = "{0:00}:{1:00}:{2:00}.{3:00}";
-        private CrackObjectProvider crackObjectProvider;
+        private ObjectToCrackProvider objectToCrackProvider;
 
-        private DictionaryProvider dictionaryProvider;
+        private IDictionaryTestProvider dictionaryTestProvider;
 
-        private ICrackerPort crackerPort;
-
-        public DictionaryCrackProcessor(CrackObjectProvider crackObjectProvider, DictionaryProvider dictionaryProvider, ICrackerPort crackerPort)
+        public DictionaryCrackProcessor(ObjectToCrackProvider crackObjectProvider, IDictionaryTestProvider dictionaryProvider)
         {
-            this.crackObjectProvider = crackObjectProvider;
-            this.dictionaryProvider = dictionaryProvider;
-            this.crackerPort = crackerPort;
+            this.objectToCrackProvider = crackObjectProvider;
+            this.dictionaryTestProvider = dictionaryProvider;
         }
 
-        public CrackResult crackPassword(int startPointer, int endPointer)
+        public CrackResult crackPassword(string objectName, string dictionaryName, int startPointer, int endPointer)
         {
             long counter = 0;
-            string[] words = this.dictionaryProvider.GetWords(startPointer, endPointer);
-            byte[] hashToCrack = this.crackObjectProvider.HashContent;
+            TimeSpan ts;
+            string elapsedTime;
+            string[] words = this.dictionaryTestProvider.fetchDictionaryWords(dictionaryName, startPointer, endPointer);
+            ObjectToCrackDefinition objectToCrack = this.objectToCrackProvider.getObject(objectName);
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
+            var crackerPort = new HashCrackerAdapter();
             foreach (string word in words)
             {
                 List<string> permutedWords = Permute(word);
@@ -39,18 +39,20 @@ namespace CrackServer.Services
                 foreach (string permutedWord in permutedWords)
                 {
                     Console.WriteLine(permutedWord);
-                    bool result = crackerPort.tryCrack(permutedWord, hashToCrack);
+                    bool result = crackerPort.tryCrack(permutedWord, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
                     if (result)
                     {
                         stopWatch.Stop();
-                        TimeSpan ts = stopWatch.Elapsed;
-                        string elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                        ts = stopWatch.Elapsed;
+                        elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
                         return new CrackResult(word, elapsedTime, counter);
                     }
                     counter++;
                 }
             }
-            return null;
+            ts = stopWatch.Elapsed;
+            elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+            return new CrackResult(null, elapsedTime, counter);
         }
 
         static List<string> Permute(String input)
@@ -77,8 +79,5 @@ namespace CrackServer.Services
 
             return permutedWords;
         }
-        public CrackObjectProvider CrackObjectProvider { get => crackObjectProvider; set => crackObjectProvider = value; }
-        public DictionaryProvider DictionaryProvider { get => dictionaryProvider; set => dictionaryProvider = value; }
-        public ICrackerPort CrackerPort { get => crackerPort; set => crackerPort = value; }
     }
 }
