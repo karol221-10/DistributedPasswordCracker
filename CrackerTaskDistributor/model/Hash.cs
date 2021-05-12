@@ -8,9 +8,9 @@ namespace CrackerTaskDistributor.model
 {
     class Hash
     {
-        String hashName { get; set; }
-        String hashType { get; set; } //TODO: should be enum of allowed values (MD5, SHA1 etc.)
-        String hashContent { get; set; }
+        public string hashName { get; set; }
+        public string hashType { get; set; } //TODO: should be enum of allowed values (MD5, SHA1 etc.)
+        public string hashContent { get; set; }
 
     }
 }

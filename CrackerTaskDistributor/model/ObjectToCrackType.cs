@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CrackerTaskDistributor.model
 {
-    class Base64EncodedFile
+    enum ObjectToCrackType
     {
-        public String filename { get; set; }
-        public String fileContent { get; set; }
+        UNDEFINED,
+        MD5
     }
 }

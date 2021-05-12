@@ -10,6 +10,6 @@ namespace CrackerTaskDistributor.api
     interface FileProvider
     {
         DictionaryModel readDictionary(String filename);
-        Base64EncodedFile readFileToCrack(String filename);
+        DictionaryFile readFileToCrack(String filename);
     }
 }

@@ -9,9 +9,8 @@ namespace CrackerTaskDistributor.api
 {
     interface CrackServerProcessor
     {
-        public void registerClient(String clientAddress);
-        public void addDictionary(Base64EncodedFile file);
-        public void addFileToCrack(Base64EncodedFile file);
+        public void addDictionary(DictionaryModel file);
+        public void addFileToCrack(DictionaryFile file);
         public void addHashToCrack(Hash hash);
         public bool tryCrackFile(String filename, int clientId, int startPointer, int endPointer);
         public bool tryCrackHash(String hashName, int clientId, int startPointer, int endPointer);

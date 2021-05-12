@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CrackerTaskDistributor": {
+      "commandName": "Project",
+      "commandLineArgs": "--serversFile servers.txt --objectToCrackName testMd5 --objectToCrackContent 73bdb69e8365a77db748aa816b7e857e --objectToCrackType MD5 --dictionaryFile test_dict.txt",
+      "workingDirectory": "C:\\Users\\Karol Ślusarz\\Source\\Repos\\DistributedPasswordCracker\\CrackerTaskDistributor\\bin\\Debug\\net5.0"
+    }
+  }
+}

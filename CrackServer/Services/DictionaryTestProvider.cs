@@ -12,6 +12,8 @@ namespace CrackServer.Services
 
         public void addDictionary(string dictionaryName, string[] dictionaryContent)
         {
+            Console.WriteLine("Added dictionary {0}", dictionaryName);
+            dictionaryMap.Remove(dictionaryName);
             dictionaryMap.Add(dictionaryName, dictionaryContent.OfType<string>().ToList());
         }
 

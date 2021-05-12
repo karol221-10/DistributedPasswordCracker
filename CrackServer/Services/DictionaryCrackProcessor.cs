@@ -39,7 +39,7 @@ namespace CrackServer.Services
                 {
                     Console.WriteLine(word);
                     //todo: wydzielic sprytnie te dwa ify
-                    bool result = crackerPort.tryCrack(word, hashToCrack);
+                    bool result = crackerPort.tryCrack(word, objectToCrack.objectContent);
                     if (result)
                     {
                         stopWatch.Stop();

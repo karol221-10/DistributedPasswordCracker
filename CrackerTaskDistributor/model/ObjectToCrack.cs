@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace CrackerTaskDistributor.model
 {
-    class DictionaryModel
+    class ObjectToCrack
     {
-        public string dictionaryName { get; set; }
-        public string[] dictionaryContent { get; set; }
+        public string name;
+        public string content;
+        public ObjectToCrackType type;
+        public ObjectToCrackMethod crackMethod;
     }
 }

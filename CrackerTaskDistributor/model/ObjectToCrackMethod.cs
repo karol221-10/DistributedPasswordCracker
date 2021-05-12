@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CrackerTaskDistributor.model
 {
-    class DictionaryModel
+    enum ObjectToCrackMethod
     {
-        public string dictionaryName { get; set; }
-        public string[] dictionaryContent { get; set; }
+        DICTIONARY,
+        BRUTEFORCE
     }
 }

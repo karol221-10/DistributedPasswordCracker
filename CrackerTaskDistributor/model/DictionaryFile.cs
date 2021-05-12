@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CrackerTaskDistributor.model
 {
-    class DictionaryModel
+    class DictionaryFile
     {
-        public string dictionaryName { get; set; }
-        public string[] dictionaryContent { get; set; }
+        public String filename { get; set; }
+        public byte[] fileContent { get; set; }
     }
 }
