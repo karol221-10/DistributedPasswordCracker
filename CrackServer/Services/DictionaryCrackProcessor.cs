@@ -21,11 +21,13 @@ namespace CrackServer.Services
             this.dictionaryTestProvider = dictionaryProvider;
         }
 
-        public CrackResult crackPassword(string objectName, string dictionaryName, int startPointer, int endPointer)
+        public CrackResult crackPassword(string objectName, string dictionaryName, string startPointerString, string endPointerString)
         {
             long counter = 0;
             TimeSpan ts;
             string elapsedTime;
+            int startPointer = int.Parse(startPointerString);
+            int endPointer = int.Parse(endPointerString);
             string[] words = this.dictionaryTestProvider.fetchDictionaryWords(dictionaryName, startPointer, endPointer);
             ObjectToCrackDefinition objectToCrack = this.objectToCrackProvider.getObject(objectName);
 
@@ -44,8 +46,7 @@ namespace CrackServer.Services
                     {
                         stopWatch.Stop();
                         ts = stopWatch.Elapsed;
-                        elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                        return new CrackResult(word, elapsedTime, counter);
+                        return new CrackResult(word, (long)ts.TotalMilliseconds, counter);
                     }
                     counter++;
                     continue;
@@ -58,15 +59,14 @@ namespace CrackServer.Services
                     {
                         stopWatch.Stop();
                         ts = stopWatch.Elapsed;
-                        elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                        return new CrackResult(word, elapsedTime, counter);
+                        return new CrackResult(word, (long)ts.TotalMilliseconds, counter);
                     }
                     counter++;
                 }
             }
             ts = stopWatch.Elapsed;
             elapsedTime = String.Format(TIME_FORMATTER, ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-            return new CrackResult(null, elapsedTime, counter);
+            return new CrackResult(null, (long)ts.TotalMilliseconds, counter);
         }
 
         static List<string> Permute(String input)

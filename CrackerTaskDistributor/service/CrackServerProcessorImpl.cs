@@ -21,6 +21,8 @@ namespace CrackerTaskDistributor.service
             this.restClient = new RestClient(this.serverAddress);
         }
 
+        public string name => serverAddress.AbsoluteUri;
+
         public void addDictionary(DictionaryModel file)
         {
             RestRequest request = new RestRequest("/api/dictionary", Method.PUT);
@@ -50,14 +52,22 @@ namespace CrackerTaskDistributor.service
             }
         }
 
-        public bool tryCrackFile(string filename, int clientId, int startPointer, int endPointer)
+        public bool tryCrackFile(string filename, int startPointer, int endPointer)
         {
             throw new NotImplementedException();
         }
 
-        public bool tryCrackHash(string hashName, int clientId, int startPointer, int endPointer)
+        public HackResponse tryCrackHash(HackRequest hackRequest)
         {
-            throw new NotImplementedException();
+            RestRequest request = new RestRequest("/api/Hack", Method.PUT);
+            var json = JsonSerializer.Serialize(hackRequest);
+            request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
+            var response = restClient.Execute(request);
+            if(response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                Console.WriteLine("Error occured during hack password on server {0}", name);
+            }
+            return JsonSerializer.Deserialize<HackResponse>(response.Content);
         }
     }
 }

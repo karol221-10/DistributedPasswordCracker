@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace WebApplication3.ObjectApis
+namespace CrackerTaskDistributor.model
 {
-    public class HackRequest 
+    class HackRequest
     {
         public String objectName { get; set; }
-
         public String dictionaryName { get; set; }
         public string startPointer { get; set; }
         public string endPointer { get; set; }

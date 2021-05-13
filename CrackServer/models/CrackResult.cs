@@ -6,22 +6,18 @@ using System.Threading.Tasks;
 namespace CrackServer.models
 {
     public class CrackResult
-    { 
-        private String crackedPassword;
-
-        private String duratrion;
-
-        private long crackedPassowrdCounter;
-
-        public CrackResult(string crackedPassword, string duratrion, long crackedPassowrdCounter)
+    {
+        public CrackResult(string crackedPassword, long duration, long crackedPasswordCounter)
         {
-            this.CrackedPassword = crackedPassword;
-            this.Duratrion = duratrion;
-            this.CrackedPassowrdCounter = crackedPassowrdCounter;
+            this.crackedPassword = crackedPassword;
+            this.duration = duration;
+            this.crackedPasswordCounter = crackedPasswordCounter;
         }
 
-        public string CrackedPassword { get => crackedPassword; set => crackedPassword = value; }
-        public string Duratrion { get => duratrion; set => duratrion = value; }
-        public long CrackedPassowrdCounter { get => crackedPassowrdCounter; set => crackedPassowrdCounter = value; }
+        public string crackedPassword { get; set; }
+
+        public long duration { get; set; }
+
+        public long crackedPasswordCounter { get; set; }
     }
 }

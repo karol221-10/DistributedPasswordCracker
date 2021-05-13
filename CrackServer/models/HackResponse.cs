@@ -9,5 +9,8 @@ namespace WebApplication3.ObjectApis
     {
         public Boolean done { get; set; }
         public String foundPassword { get; set; }
+
+        public long checkedPasswords;
+        public long time;
     }
 }
