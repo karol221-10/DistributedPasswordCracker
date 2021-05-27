@@ -17,9 +17,9 @@ namespace WebApplication3.Controllers
     [ApiController]
     public class DictionaryController : ControllerBase
     {
-       private readonly IDictionaryTestProvider dictionaryService;
+       private readonly IDictionaryProvider dictionaryService;
 
-        public DictionaryController(IDictionaryTestProvider dictionaryService)
+        public DictionaryController(IDictionaryProvider dictionaryService)
         {
             this.dictionaryService = dictionaryService;
         }

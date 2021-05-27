@@ -14,17 +14,23 @@ namespace WebApplication3.Controllers
     [ApiController]
     public class HackController : ControllerBase
     {
-        private DictionaryCrackProcessor dictionaryCrackProcessor;
+        private CrackProcessor dictionaryCrackProcessor;
+        private IDictionaryProvider dictionaryProvider;
 
-        public HackController(DictionaryCrackProcessor dictionaryCrackProcessor)
+        public HackController(CrackProcessor dictionaryCrackProcessor, IDictionaryProvider dictionaryProvider)
         {
             this.dictionaryCrackProcessor = dictionaryCrackProcessor;
+            this.dictionaryProvider = dictionaryProvider;
         }
 
         [HttpPut]
         public CrackResult hackPassword(HackRequest hackRequest)
         {
-            return dictionaryCrackProcessor.crackPassword(hackRequest.objectName, hackRequest.dictionaryName, hackRequest.startPointer, hackRequest.endPointer);
+            if(hackRequest.dictionaryName == null)
+            {
+                return dictionaryCrackProcessor.CrackPassword(hackRequest.objectName, hackRequest.startPointer, hackRequest.endPointer, new BruteForceWordProvider());
+            }
+            return dictionaryCrackProcessor.CrackPassword(hackRequest.objectName, hackRequest.startPointer, hackRequest.endPointer, new DictionaryWordProvider(dictionaryProvider, hackRequest.dictionaryName));
         }
 
     }

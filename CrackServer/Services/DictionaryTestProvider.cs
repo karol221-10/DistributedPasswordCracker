@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CrackServer.Services
 {
-    public class DictionaryTestProvider : IDictionaryTestProvider
+    public class DictionaryTestProvider : IDictionaryProvider
     {
         private Dictionary<string, List<string>> dictionaryMap = new Dictionary<string, List<string>>();
 

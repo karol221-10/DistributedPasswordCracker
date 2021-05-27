@@ -8,27 +8,22 @@ using System.Threading.Tasks;
 
 namespace CrackServer.Services
 {
-    public class DictionaryCrackProcessor
+    public class CrackProcessor
     {
         private const string TIME_FORMATTER = "{0:00}:{1:00}:{2:00}.{3:00}";
         private ObjectToCrackProvider objectToCrackProvider;
 
-        private IDictionaryTestProvider dictionaryTestProvider;
-
-        public DictionaryCrackProcessor(ObjectToCrackProvider crackObjectProvider, IDictionaryTestProvider dictionaryProvider)
+        public CrackProcessor(ObjectToCrackProvider crackObjectProvider)
         {
             this.objectToCrackProvider = crackObjectProvider;
-            this.dictionaryTestProvider = dictionaryProvider;
         }
 
-        public CrackResult crackPassword(string objectName, string dictionaryName, string startPointerString, string endPointerString)
+        public CrackResult CrackPassword(string objectName, string startPointer, string endPointer, IWordProvider wordProvider)
         {
             long counter = 0;
             TimeSpan ts;
             string elapsedTime;
-            int startPointer = int.Parse(startPointerString);
-            int endPointer = int.Parse(endPointerString);
-            string[] words = this.dictionaryTestProvider.fetchDictionaryWords(dictionaryName, startPointer, endPointer);
+            string[] words = wordProvider.getWords(startPointer, endPointer);
             ObjectToCrackDefinition objectToCrack = this.objectToCrackProvider.getObject(objectName);
 
             Stopwatch stopWatch = new Stopwatch();

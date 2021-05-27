@@ -16,6 +16,8 @@ namespace CrackerTaskDistributor
         private static Mutex crackedPasswordCounterMutex = new Mutex();
         private static bool foundPassword = false;
         private static long crackedPasswordInLastMinute = 0;
+        private static BruteForceRangeDeterminator bruteForceRangeDeterminator = new BruteForceRangeDeterminator();
+        private static DictionaryCrackPasswordRangeDeterminator dictionaryCrackPasswordRangeDeterminator = new DictionaryCrackPasswordRangeDeterminator();
         static void Main(string[] args) 
         {
             var startupParameterResolver = new StartupParameterResolver(args);
@@ -24,8 +26,11 @@ namespace CrackerTaskDistributor
             {
                 CrackServerProcessor crackServerProcessor = new CrackServerProcessorImpl(server);
                 crackServerProcessors.Add(crackServerProcessor);
-                crackServerProcessor.addDictionary(startupParameterResolver.dictionaryModel);
-                Console.WriteLine("Register dictionary in server {0}", server);
+                if(startupParameterResolver.dictionaryModel != null)
+                {
+                    crackServerProcessor.addDictionary(startupParameterResolver.dictionaryModel);
+                    Console.WriteLine("Register dictionary in server {0}", server);
+                }
                 crackServerProcessor.addHashToCrack(addObjectToCrack(startupParameterResolver.objectToCrack, crackServerProcessor));
                 Console.WriteLine("Registered object to crack in server {0}", server);
             }
@@ -33,10 +38,12 @@ namespace CrackerTaskDistributor
             Thread[] threads = new Thread[crackServerProcessors.Count + 1];
             for(int i = 0; i < threads.Length - 1; i++)
             {
+
                 threads[i] = new Thread(tryCrack);
                 threads[i].Start(new object[] {
                     startupParameterResolver.objectToCrack.name,
-                        startupParameterResolver.dictionaryModel.dictionaryName,
+                        startupParameterResolver.dictionaryModel != null ? dictionaryCrackPasswordRangeDeterminator : bruteForceRangeDeterminator,
+                        startupParameterResolver.dictionaryModel != null ? startupParameterResolver.dictionaryModel.dictionaryName : null,
                         startupParameterResolver.blockSize,
                         crackServerProcessors[i]
                     });
@@ -52,18 +59,6 @@ namespace CrackerTaskDistributor
             // --dictionaryFile {filename} - file containg list of dictionaries {one in each word}
             // --fileToCrack {filename} - file to crack 
             // --blockSize {number} - number of passwords verified in one iteration
-            
-            /* Algorithm
-             * var dictionaryName = StartupParameterResolver.getDictionaryFilename()
-             * var fileToCrack = StartupParameterResolver.getFileToCrackFilename()
-             * var clients = StartupParameterResolver.getCrackServerAddresses()
-             * var dictionary = FileProvider.readDictionary()
-             * var fileToCrack = FileProvider.readFileToCrack()
-             * for each client generate start and end pointers. Then {
-             *     var result = crackServerProcessor.tryCrackFile(fileToCrack, i, startPointer[i], endPointer[i]);
-             *     if result.success == true then print password, execution time and kill program
-             * }
-             */
         }
 
         private static Hash addObjectToCrack(ObjectToCrack objectToCrack, CrackServerProcessor crackServerProcessor)
@@ -91,22 +86,21 @@ namespace CrackerTaskDistributor
         {
             while (foundPassword == false)
             {
+                string startValue;
+                string endValue; 
                 object[] array = args as object[];
                 string objectToCrackName = (string)array[0];
-                string dictionaryName = (string)array[1];
-                int chunkSize = (int)array[2];
-                CrackServerProcessor processor = (CrackServerProcessor)array[3];
-                mut.WaitOne();
-                string startValue = counter.ToString();
-                counter += chunkSize;
-                string endValue = counter.ToString();
-                mut.ReleaseMutex();
+                RangeDeterminator rangeDeterminator = (RangeDeterminator)array[1];
+                string dictionaryName = (string)array[2];
+                int chunkSize = (int)array[3];
+                CrackServerProcessor processor = (CrackServerProcessor)array[4];
                 HackRequest request = new HackRequest();
-                request.startPointer = startValue;
-                request.endPointer = endValue;
+                var range = rangeDeterminator.GetAndIncrement(chunkSize);
+                request.startPointer = range.startPointer;
+                request.endPointer = range.endPointer;
                 request.objectName = objectToCrackName;
                 request.dictionaryName = dictionaryName;
-                Console.WriteLine("Request of hack password: {0} from dictionary range {1} to {2}", processor.name, startValue, endValue);
+                Console.WriteLine("Request of hack password: {0} from range {1} to {2}", processor.name, range.startPointer, range.endPointer);
                 var response = processor.tryCrackHash(request);
                 Console.WriteLine("Received response from {0} {1}", processor.name, JsonSerializer.Serialize(response));
                 crackedPasswordCounterMutex.WaitOne();

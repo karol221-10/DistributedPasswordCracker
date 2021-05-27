@@ -17,6 +17,7 @@ namespace CrackerTaskDistributor.service
         public List<string> crackServerAddresses { get; }
         public DictionaryModel dictionaryModel { get; }
         public ObjectToCrack objectToCrack { get; }
+        public ObjectToCrackMethod objectToCrackMethod { get; }
         public StartupParameterResolver(string[] commandLineParams)
         {
             objectToCrack = new ObjectToCrack();
@@ -39,7 +40,7 @@ namespace CrackerTaskDistributor.service
                     objectToCrack.type = (ObjectToCrackType) Enum.Parse(typeof(ObjectToCrackType), commandLineParams[i + 1]);
                 }
                 if(CommandLineParameterNames.OBJECT_TO_CRACK_METHOD_PARAMETER.Equals(commandLineParams[i])) {
-                    objectToCrack.crackMethod = (ObjectToCrackMethod)Enum.Parse(typeof(ObjectToCrackMethod), commandLineParams[i + 1]);
+                    objectToCrackMethod = (ObjectToCrackMethod)Enum.Parse(typeof(ObjectToCrackMethod), commandLineParams[i + 1]);
                 }
             }
             ValidateResolvedParameters();
