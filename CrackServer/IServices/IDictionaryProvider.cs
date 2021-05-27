@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CrackServer.Services
 {
-    public interface IDictionaryTestProvider
+    public interface IDictionaryProvider
     {
 
         string[] fetchDictionaryWords(string dictionaryName, int startPointer, int endPointer);

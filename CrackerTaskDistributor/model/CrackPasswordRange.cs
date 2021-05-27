@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CrackerTaskDistributor.model
 {
-    class ObjectToCrack
+    public class CrackPasswordRange
     {
-        public string name;
-        public string content;
-        public ObjectToCrackType type;
+        public string startPointer { get; set; }
+        public string endPointer { get; set; }
     }
 }

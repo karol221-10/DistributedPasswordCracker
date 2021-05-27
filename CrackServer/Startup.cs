@@ -30,8 +30,8 @@ namespace CrackServer
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApplication3", Version = "v1" });
             });
             services.AddSingleton<ObjectToCrackProvider>();
-            services.AddSingleton<IDictionaryTestProvider,DictionaryTestProvider>();
-            services.AddSingleton<DictionaryCrackProcessor>();
+            services.AddSingleton<IDictionaryProvider,DictionaryTestProvider>();
+            services.AddSingleton<CrackProcessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
