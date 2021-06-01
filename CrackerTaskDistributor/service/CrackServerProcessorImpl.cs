@@ -14,7 +14,7 @@ namespace CrackerTaskDistributor.service
     {
         private Uri serverAddress;
         private RestClient restClient;
-
+        private int timeout = 1200000;
         public CrackServerProcessorImpl(string serverAddress)
         {
             this.serverAddress = new Uri(serverAddress);
@@ -28,6 +28,7 @@ namespace CrackerTaskDistributor.service
             RestRequest request = new RestRequest("/api/dictionary", Method.PUT);
             var json = JsonSerializer.Serialize(file);
             request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
+            request.Timeout = timeout;
             var response = restClient.Execute(request);
             if(response.StatusCode != System.Net.HttpStatusCode.OK)
             {
@@ -45,6 +46,7 @@ namespace CrackerTaskDistributor.service
             RestRequest request = new RestRequest("/api/Item/hash", Method.PUT);
             var json = JsonSerializer.Serialize(hash);
             request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
+            request.Timeout = timeout;
             var response = restClient.Execute(request);
             if(response.StatusCode != System.Net.HttpStatusCode.OK)
             {
@@ -62,6 +64,7 @@ namespace CrackerTaskDistributor.service
             RestRequest request = new RestRequest("/api/Hack", Method.PUT);
             var json = JsonSerializer.Serialize(hackRequest);
             request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
+            request.Timeout = timeout;
             var response = restClient.Execute(request);
             if(response.StatusCode != System.Net.HttpStatusCode.OK)
             {

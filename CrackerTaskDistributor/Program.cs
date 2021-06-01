@@ -115,6 +115,11 @@ namespace CrackerTaskDistributor
                 Console.WriteLine("Request of hack password: {0} from range {1} to {2}", processor.name, range.startPointer, range.endPointer);
                 var response = processor.tryCrackHash(request);
                 Console.WriteLine("Received response from {0} {1}", processor.name, JsonSerializer.Serialize(response));
+                if(response.crackedPassword != null)
+                {
+                    foundPassword = true;
+                    break;
+                }
                 crackedPasswordCounterMutex.WaitOne();
                 crackedPasswordInLastMinute += response.crackedPasswordCounter;
                 crackedPasswordCounterMutex.ReleaseMutex();

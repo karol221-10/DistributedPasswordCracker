@@ -60,9 +60,8 @@ namespace CrackServer.Services
                     }
                     counter++;
 
-                    for (int i = 1;i <= 9999; i++){
+                    for (int i = 1;i <= 1000; i++){
                      string permutedWordWithDigit = permutedWord + i;
-                      Console.WriteLine(permutedWordWithDigit);
                         bool result2 = crackerPort.tryCrack(permutedWordWithDigit, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
                     if (result2)
                       {
@@ -71,10 +70,9 @@ namespace CrackServer.Services
                             return new CrackResult(permutedWordWithDigit, (long)ts.TotalMilliseconds, counter);
                       }
                       counter++;
-                      foreach (string specialChar in specialCharsCombinations)
+                     /* foreach (string specialChar in specialCharsCombinations)
                        {
                           string permutedWordWithDigitWithChars = permutedWordWithDigit + specialChar;
-                         Console.WriteLine(permutedWordWithDigitWithChars);
                          bool result3 = crackerPort.tryCrack(permutedWordWithDigitWithChars, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
                         if (result3)
                         {
@@ -83,7 +81,7 @@ namespace CrackServer.Services
                              return new CrackResult(permutedWordWithDigitWithChars, (long)ts.TotalMilliseconds, counter);
                           }
                            counter++;
-                      }
+                      }*/
                      
                     }
                 }
