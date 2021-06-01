@@ -59,7 +59,6 @@ namespace CrackServer.Services
 
                     for (int i = 1;i <= 9999; i++){
                         string permutedWordWithDigit = permutedWord + i;
-                        Console.WriteLine(permutedWordWithDigit);
                         bool result2 = crackerPort.tryCrack(permutedWordWithDigit, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
                         if (result2)
                         {
@@ -71,7 +70,6 @@ namespace CrackServer.Services
                         foreach (string specialChar in specialCharsCombinations)
                         {
                             string permutedWordWithDigitWithChars = permutedWordWithDigit + specialChar;
-                            Console.WriteLine(permutedWordWithDigitWithChars);
                             bool result3 = crackerPort.tryCrack(permutedWordWithDigitWithChars, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
                             if (result3)
                             {
