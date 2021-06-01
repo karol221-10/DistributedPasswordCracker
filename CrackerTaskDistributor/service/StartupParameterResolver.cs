@@ -36,6 +36,10 @@ namespace CrackerTaskDistributor.service
                 {
                     objectToCrack.content = commandLineParams[i + 1];
                 }
+                if(CommandLineParameterNames.BLOCK_SIZE_PARAMETER.Equals(commandLineParams[i]))
+                {
+                    blockSize = Int32.Parse(commandLineParams[i + 1]);
+                }
                 if(CommandLineParameterNames.OBJECT_TO_CRACK_TYPE_PARAMETER.Equals(commandLineParams[i])) {
                     objectToCrack.type = (ObjectToCrackType) Enum.Parse(typeof(ObjectToCrackType), commandLineParams[i + 1]);
                 }

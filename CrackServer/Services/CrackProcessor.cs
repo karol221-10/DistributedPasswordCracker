@@ -34,7 +34,6 @@ namespace CrackServer.Services
                 List<string> permutedWords = Permute(word);
                 if (word.All(char.IsDigit))
                 {
-                    Console.WriteLine(word);
                     //todo: wydzielic sprytnie te dwa ify
                     bool result = crackerPort.tryCrack(word, objectToCrack.objectContent);
                     if (result)
@@ -48,7 +47,6 @@ namespace CrackServer.Services
                 }
                 foreach (string permutedWord in permutedWords)
                 {
-                    Console.WriteLine(permutedWord);
                     bool result = crackerPort.tryCrack(permutedWord, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
                     if (result)
                     {

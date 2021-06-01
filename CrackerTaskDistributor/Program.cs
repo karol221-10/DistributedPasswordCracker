@@ -40,13 +40,25 @@ namespace CrackerTaskDistributor
             {
 
                 threads[i] = new Thread(tryCrack);
+                RangeDeterminator rangeDeterminator;
+                string dictionaryName = null;
+                if(startupParameterResolver.dictionaryModel != null)
+                {
+                    rangeDeterminator = dictionaryCrackPasswordRangeDeterminator;
+                    dictionaryName = startupParameterResolver.dictionaryModel.dictionaryName;
+                }
+                else
+                {
+                    rangeDeterminator = bruteForceRangeDeterminator;
+                }
                 threads[i].Start(new object[] {
                     startupParameterResolver.objectToCrack.name,
-                        startupParameterResolver.dictionaryModel != null ? dictionaryCrackPasswordRangeDeterminator : bruteForceRangeDeterminator,
-                        startupParameterResolver.dictionaryModel != null ? startupParameterResolver.dictionaryModel.dictionaryName : null,
+                        rangeDeterminator,
+                        dictionaryName,
                         startupParameterResolver.blockSize,
                         crackServerProcessors[i]
-                    });
+                    })
+            ;
             }
             threads[crackServerProcessors.Count] = new Thread(countPerformance);
             threads[crackServerProcessors.Count].Start();

@@ -26,6 +26,7 @@ namespace WebApplication3.Controllers
         [HttpPut]
         public CrackResult hackPassword(HackRequest hackRequest)
         {
+            Console.WriteLine("Received request: crack object {0} by dictionary {1} from range {2} to {3}", hackRequest.objectName, hackRequest.dictionaryName, hackRequest.startPointer, hackRequest.endPointer);
             if(hackRequest.dictionaryName == null)
             {
                 return dictionaryCrackProcessor.CrackPassword(hackRequest.objectName, hackRequest.startPointer, hackRequest.endPointer, new BruteForceWordProvider());
