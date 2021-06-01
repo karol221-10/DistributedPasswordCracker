@@ -12,13 +12,8 @@ namespace CrackServer.Services
     {
         public bool tryCrack(string dictWord, byte[] passwordHashed)
         {
-            byte[] tmpWordByte;
-            byte[] tmpWordHash;
-
-            tmpWordByte = ASCIIEncoding.ASCII.GetBytes(dictWord);
-            tmpWordHash = new MD5CryptoServiceProvider().ComputeHash(tmpWordByte);
-         
-            return passwordHashed.SequenceEqual(tmpWordHash);
+            string encodedHash = Encoding.Default.GetString(passwordHashed);
+            return dictWord.Equals(encodedHash);
         }
     }
 }
