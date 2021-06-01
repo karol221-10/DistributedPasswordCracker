@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CrackServer.Services
@@ -25,14 +26,16 @@ namespace CrackServer.Services
             string elapsedTime;
             string[] words = wordProvider.getWords(startPointer, endPointer);
             ObjectToCrackDefinition objectToCrack = this.objectToCrackProvider.getObject(objectName);
-
+         
+           
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             var crackerPort = new HashCrackerAdapter();
+            List<string> specialCharsCombinations = generate();
             foreach (string word in words)
             {
                 List<string> permutedWords = Permute(word);
-                List<string> specialCharsCombinations = permuteSpecialChars();
+                
                 if (word.All(char.IsDigit))
                 {
                     Console.WriteLine(word);
@@ -55,35 +58,35 @@ namespace CrackServer.Services
                     {
                         stopWatch.Stop();
                         ts = stopWatch.Elapsed;
-                        return new CrackResult(word, (long)ts.TotalMilliseconds, counter);
+                        return new CrackResult(permutedWord, (long)ts.TotalMilliseconds, counter);
                     }
                     counter++;
 
                     for (int i = 1;i <= 9999; i++){
-                        string permutedWordWithDigit = permutedWord + i;
-                        Console.WriteLine(permutedWordWithDigit);
+                     string permutedWordWithDigit = permutedWord + i;
+                      Console.WriteLine(permutedWordWithDigit);
                         bool result2 = crackerPort.tryCrack(permutedWordWithDigit, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
-                        if (result2)
+                    if (result2)
+                      {
+                          stopWatch.Stop();
+                        ts = stopWatch.Elapsed;
+                            return new CrackResult(permutedWordWithDigit, (long)ts.TotalMilliseconds, counter);
+                      }
+                      counter++;
+                      foreach (string specialChar in specialCharsCombinations)
+                       {
+                          string permutedWordWithDigitWithChars = permutedWordWithDigit + specialChar;
+                         Console.WriteLine(permutedWordWithDigitWithChars);
+                         bool result3 = crackerPort.tryCrack(permutedWordWithDigitWithChars, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
+                        if (result3)
                         {
-                            stopWatch.Stop();
-                            ts = stopWatch.Elapsed;
-                            return new CrackResult(word, (long)ts.TotalMilliseconds, counter);
-                        }
-                        counter++;
-                        foreach (string specialChar in specialCharsCombinations)
-                        {
-                            string permutedWordWithDigitWithChars = permutedWordWithDigit + specialChar;
-                            Console.WriteLine(permutedWordWithDigitWithChars);
-                            bool result3 = crackerPort.tryCrack(permutedWordWithDigitWithChars, objectToCrack.objectContent); //TODO: Factory to create proper crackerPort, based on ObjectToCrackDefinition.type
-                            if (result3)
-                            {
-                                stopWatch.Stop();
-                                ts = stopWatch.Elapsed;
-                                return new CrackResult(word, (long)ts.TotalMilliseconds, counter);
-                            }
-                            counter++;
-                        }
-                       //wdw
+                               stopWatch.Stop();
+                               ts = stopWatch.Elapsed;
+                             return new CrackResult(permutedWordWithDigitWithChars, (long)ts.TotalMilliseconds, counter);
+                          }
+                           counter++;
+                      }
+                     
                     }
                 }
             }
@@ -118,11 +121,11 @@ namespace CrackServer.Services
         }
 
 
-        public static List<string> permuteSpecialChars()
+        public static List<string> permuteSpecialChars(int r1)
         {
             char[] values = { '!', '@', '#', '$', '%', '^', '&', '*' };
             int n = values.Length;
-            int r = 3;
+            int r = r1;
             int[] output = new int[r];
             List<string> results = new List<string>();
 
@@ -145,6 +148,16 @@ namespace CrackServer.Services
                 }
             }
             return results;
+        }
+
+        private List<string> generate()
+        {
+            List<string> concatArray = new List<string>();
+            for (int i = 1; i <= 7; i++)
+            {
+                concatArray.AddRange( permuteSpecialChars(i));
+            }
+            return concatArray;
         }
 
         private static String print(char[] values, int r, int[] output)
